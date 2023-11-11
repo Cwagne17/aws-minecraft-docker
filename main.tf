@@ -91,8 +91,13 @@ resource "tls_private_key" "ssh" {
   rsa_bits  = 4096
 }
 
+
+locals {
+  file_name = "${var.project_name}-private.pem"
+}
+
 resource "local_file" "private_key" {
-  filename = "${var.project_name}-private.pem"
+  filename = local.file_name
   content  = tls_private_key.ssh.private_key_pem
 }
 
