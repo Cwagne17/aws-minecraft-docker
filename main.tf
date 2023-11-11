@@ -138,14 +138,14 @@ module "security-group" {
       to_port     = 22
       protocol    = "tcp"
       description = "SSH access"
-      cidr_blocks = ["0.0.0.0/0"]
+      cidr_blocks = "0.0.0.0/0"
     },
     {
       from_port   = 25565
       to_port     = 25565
       protocol    = "tcp"
       description = "Minecraft server"
-      cidr_blocks = ["0.0.0.0/0"]
+      cidr_blocks = "0.0.0.0/0"
     },
   ]
 }

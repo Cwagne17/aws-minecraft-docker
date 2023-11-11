@@ -8,7 +8,7 @@ terraform {
 }
 
 module "mc-server" {
-  source = ".."
+  source = "./.."
 
   project_name = "test-minecraft-server"
   #   instance_type = "t3.large"

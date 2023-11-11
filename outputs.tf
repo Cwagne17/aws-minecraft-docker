@@ -1,5 +1,5 @@
 output "ec2_instance_id" {
-  value = module.minecraft-server.instance_id
+  value = module.minecraft-server.id
 }
 
 output "ip_address" {
@@ -7,13 +7,13 @@ output "ip_address" {
 }
 
 output "ssh_command" {
-  value = "ssh -i ${aws_key_pair.ssh.private_key} ec2-user@${module.minecraft-server.public_ip}"
+  value = "ssh -i <KEY_PATH> ec2-user@${module.minecraft-server.public_ip}"
 }
 
 output "s3_bucket" {
-  value = aws_s3_bucket.minecraft-server.bucket
+  value = module.s3-bucket.s3_bucket_id
 }
 
 output "s3_bucket_arn" {
-  value = aws_s3_bucket.minecraft-server.arn
+  value = module.s3-bucket.s3_bucket_arn
 }
