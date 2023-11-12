@@ -43,6 +43,8 @@ module "s3-bucket" {
   source  = "terraform-aws-modules/s3-bucket/aws"
   version = "3.15.1"
 
+  create_bucket = var.create_bucket
+
   bucket = "${var.project_name}-backups"
 
   # Enables lifecycle rule for cost-effective storage

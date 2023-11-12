@@ -9,6 +9,12 @@ variable "create_vpc" {
   default     = true
 }
 
+variable "create_bucket" {
+  type        = bool
+  description = "Whether or not to create an S3 backups bucket."
+  default     = true
+}
+
 variable "instance_type" {
   type        = string
   description = "The type of instance to start."
