@@ -22,6 +22,10 @@ locals {
 
   vpc_id    = local.create_vpc ? module.vpc.vpc_id : var.vpc_id
   subnet_id = local.create_vpc ? module.vpc.public_subnets[0] : var.subnet_id
+
+  create_ssh_key = var.ssh_public_key == ""
+
+  public_key = local.create_ssh_key ? tls_private_key.ssh.public_key_openssh : var.ssh_public_key
 }
 
 # -------------------------------------------
@@ -96,6 +100,8 @@ data "aws_ami" "al2023" {
 
 # create SSH key pair
 resource "tls_private_key" "ssh" {
+  count = local.create_ssh_key ? 1 : 0
+
   algorithm = "RSA"
   rsa_bits  = 4096
 }
@@ -106,13 +112,15 @@ locals {
 }
 
 resource "local_file" "private_key" {
+  count = local.create_ssh_key ? 1 : 0
+
   filename = local.file_name
   content  = tls_private_key.ssh.private_key_pem
 }
 
 resource "aws_key_pair" "ssh" {
   key_name   = var.project_name
-  public_key = tls_private_key.ssh.public_key_openssh
+  public_key = local.public_key
 }
 
 

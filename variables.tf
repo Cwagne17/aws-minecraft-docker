@@ -20,6 +20,12 @@ variable "instance_type" {
   default     = "t2.micro"
 }
 
+variable "ssh_public_key" {
+  type        = string
+  description = "The public key to use for SSH access."
+  default     = ""
+}
+
 variable "subnet_id" {
   type        = string
   description = "The ID of the subnet to use."
