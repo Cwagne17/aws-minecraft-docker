@@ -17,6 +17,13 @@ provider "aws" {
   region = "us-east-1"
 }
 
+locals {
+  create_vpc = var.vpc_id == ""
+
+  vpc_id    = local.create_vpc ? module.vpc.vpc_id : var.vpc_id
+  subnet_id = local.create_vpc ? module.vpc.public_subnets[0] : var.subnet_id
+}
+
 # -------------------------------------------
 # CREATE VPC
 # -------------------------------------------
@@ -25,7 +32,7 @@ module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
   version = "5.1.2"
 
-  create_vpc = var.create_vpc
+  create_vpc = local.create_vpc
 
   name = var.project_name
 
@@ -122,7 +129,7 @@ module "minecraft-server" {
   key_name = aws_key_pair.ssh.key_name
 
   associate_public_ip_address = true
-  subnet_id                   = module.vpc.public_subnets[0]
+  subnet_id                   = local.subnet_id
   vpc_security_group_ids      = [module.security-group.security_group_id]
 
   create_iam_instance_profile = true
@@ -142,7 +149,7 @@ module "security-group" {
   version = "5.1.0"
 
   name   = var.project_name
-  vpc_id = module.vpc.vpc_id
+  vpc_id = local.vpc_id
 
   ingress_with_cidr_blocks = [
     {
