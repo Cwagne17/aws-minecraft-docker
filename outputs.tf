@@ -7,7 +7,7 @@ output "ip_address" {
 }
 
 output "ssh_command" {
-  value = "ssh -i ${local.file_name} ec2-user@${module.minecraft-server.public_ip}"
+  value = "ssh -i <REPLACE_W_FILE> ec2-user@${module.minecraft-server.public_ip}"
 }
 
 output "s3_bucket" {

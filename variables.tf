@@ -14,12 +14,6 @@ variable "create_bucket" {
   default     = true
 }
 
-variable "create_ssh_key" {
-  type        = bool
-  description = "Whether or not to create an SSH key."
-  default     = false
-}
-
 variable "instance_type" {
   type        = string
   description = "The type of instance to start."

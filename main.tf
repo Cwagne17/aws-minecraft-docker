@@ -22,8 +22,6 @@ locals {
 
   vpc_id    = local.create_vpc ? module.vpc.vpc_id : var.vpc_id
   subnet_id = local.create_vpc ? module.vpc.public_subnets[0] : var.subnet_id
-
-  public_key = var.create_ssh_key ? tls_private_key.ssh[0].public_key_openssh : var.ssh_public_key
 }
 
 # -------------------------------------------
@@ -95,30 +93,11 @@ data "aws_ami" "al2023" {
   }
 }
 
-
-# create SSH key pair
-resource "tls_private_key" "ssh" {
-  count = var.create_ssh_key ? 1 : 0
-
-  algorithm = "RSA"
-  rsa_bits  = 4096
-}
-
-
-locals {
-  file_name = "${var.project_name}-private.pem"
-}
-
-resource "local_file" "private_key" {
-  count = var.create_ssh_key ? 1 : 0
-
-  filename = local.file_name
-  content  = tls_private_key.ssh[0].private_key_pem
-}
-
 resource "aws_key_pair" "ssh" {
+  count = var.ssh_public_key != "" ? 1 : 0
+
   key_name   = var.project_name
-  public_key = local.public_key
+  public_key = var.ssh_public_key
 }
 
 
@@ -132,7 +111,7 @@ module "minecraft-server" {
   ami           = data.aws_ami.al2023.id
   instance_type = var.instance_type
 
-  key_name = aws_key_pair.ssh.key_name
+  key_name = var.ssh_public_key != "" ? aws_key_pair.ssh[0].key_name : null
 
   associate_public_ip_address = true
   subnet_id                   = local.subnet_id
