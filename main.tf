@@ -108,7 +108,7 @@ module "minecraft-server" {
 
   name = var.project_name
 
-  ami           = data.aws_ami.al2023.id
+  ami           = "ami-006dcf34c09e50022"
   instance_type = var.instance_type
 
   key_name = var.ssh_public_key != "" ? aws_key_pair.ssh[0].key_name : null
