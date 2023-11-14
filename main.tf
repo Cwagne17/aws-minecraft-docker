@@ -25,7 +25,7 @@ locals {
 
   create_ssh_key = var.ssh_public_key == ""
 
-  public_key = local.create_ssh_key ? tls_private_key.ssh.public_key_openssh : var.ssh_public_key
+  public_key = local.create_ssh_key ? tls_private_key.ssh[0].public_key_openssh : var.ssh_public_key
 }
 
 # -------------------------------------------
@@ -115,7 +115,7 @@ resource "local_file" "private_key" {
   count = local.create_ssh_key ? 1 : 0
 
   filename = local.file_name
-  content  = tls_private_key.ssh.private_key_pem
+  content  = tls_private_key.ssh[0].private_key_pem
 }
 
 resource "aws_key_pair" "ssh" {
