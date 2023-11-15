@@ -11,7 +11,7 @@ variable "project_name" {
 variable "create_bucket" {
   type        = bool
   description = "Whether or not to create an S3 backups bucket."
-  default     = true
+  default     = false
 }
 
 variable "instance_ami" {
