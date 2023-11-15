@@ -73,26 +73,6 @@ module "s3-bucket" {
 # CREATE EC2 INSTANCE
 # -------------------------------------------
 
-# latest Amazon Linux 2 AMI
-data "aws_ami" "al2023" {
-  most_recent = true
-
-  filter {
-    name   = "name"
-    values = ["al2023-ami-2023*x86_64"]
-  }
-
-  filter {
-    name   = "owner-alias"
-    values = ["amazon"]
-  }
-
-  filter {
-    name   = "virtualization-type"
-    values = ["hvm"]
-  }
-}
-
 resource "aws_key_pair" "ssh" {
   count = var.ssh_public_key != "" ? 1 : 0
 
@@ -108,7 +88,7 @@ module "minecraft-server" {
 
   name = var.project_name
 
-  ami           = "ami-006dcf34c09e50022"
+  ami           = var.instance_ami
   instance_type = var.instance_type
 
   key_name = var.ssh_public_key != "" ? aws_key_pair.ssh[0].key_name : null
@@ -149,6 +129,16 @@ module "security-group" {
       to_port     = 25565
       protocol    = "tcp"
       description = "Minecraft server"
+      cidr_blocks = "0.0.0.0/0"
+    },
+  ]
+
+  egress_with_cidr_blocks = [
+    {
+      from_port   = 0
+      to_port     = 0
+      protocol    = "tcp"
+      description = "All traffic"
       cidr_blocks = "0.0.0.0/0"
     },
   ]

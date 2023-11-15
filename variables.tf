@@ -14,6 +14,12 @@ variable "create_bucket" {
   default     = true
 }
 
+variable "instance_ami" {
+  type        = string
+  description = "The AMI to use for the instance."
+  default     = "ami-0e8a34246278c21e4"
+}
+
 variable "instance_type" {
   type        = string
   description = "The type of instance to start."
