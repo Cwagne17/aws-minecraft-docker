@@ -1,1 +1,1 @@
-# terraform-minecraft-server
+# AWS Minecraft Docker

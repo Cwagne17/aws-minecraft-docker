@@ -3,18 +3,8 @@ import worlds = require("../../worlds.json");
 import 'source-map-support/register';
 import * as cdk from 'aws-cdk-lib';
 import { MinecraftStack } from '../lib/minecraft-stack';
-import { MinecraftWorld } from '../lib/minecraft-world';
-
 
 const app = new cdk.App();
-
-const bootstrap = new MinecraftStack(app, 'MinecraftStack', {
-  description: "Bootstrap stack for Minecraft setup on AWS.",
-  env: {
-    account: process.env.CDK_DEFAULT_ACCOUNT,
-    region: process.env.CDK_DEFAULT_REGION,
-  },
-});
 
 /**
  * The type being enforce in the worlds.json file.
@@ -28,7 +18,7 @@ interface World {
 }
 
 for(const world of worlds as World[]) {
-  bootstrap.addDependency(new MinecraftWorld(app, world.modpack ?? "MinecraftWorld", {
+  new MinecraftStack(app, world.modpack ?? "MinecraftWorld", {
     description: `Minecraft world for ${world.modpack}`,
     modpack: world.modpack,
     javaVersion: world.java_version,
@@ -39,7 +29,7 @@ for(const world of worlds as World[]) {
       account: process.env.CDK_DEFAULT_ACCOUNT,
       region: process.env.CDK_DEFAULT_REGION,
     },
-  }));
+  });
 }
 
 
